@@ -1,0 +1,158 @@
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+@keyframes budPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* Scrollbar */
+.window-content::-webkit-scrollbar{width:8px}
+.window-content::-webkit-scrollbar-track{background:#f1f1f1;border-radius:4px}
+.window-content::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:4px}
+.window-content::-webkit-scrollbar-thumb:hover{background:#a1a1a1}
+
+/* Base UI */
+button:focus,input:focus,textarea:focus{outline:none}
+.desktop-icon{transition:transform .2s ease}
+.desktop-icon:hover{transform:scale(1.05)}
+.desktop-icon:active{transform:scale(.95)}
+.window-header{user-select:none}
+.music-playing{animation:pulse 2s infinite}
+.fixed.bottom-0{backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1)}
+.fixed.bg-white{box-shadow:0 25px 50px -12px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.05);transition:all .2s ease-out}
+textarea{font-family:'SF Mono',Monaco,'Cascadia Code','Roboto Mono',Consolas,'Courier New',monospace;line-height:1.5}
+#pictureModal{backdrop-filter:blur(5px)}
+#modalImage{transition:opacity .3s ease}
+
+@media (max-width:640px){
+  .desktop-icon{transform:scale(.9)}
+  .window-content{padding:1rem}
+  #minimizedWindows button{max-width:120px;font-size:.75rem}
+}
+
+/* ===== Bouquet (in-app) ===== */
+.bouquet-wrap{
+  position:relative;
+  width:min(78vmin,620px);
+  height:min(78vmin,620px);
+  filter:drop-shadow(0 12px 24px rgba(0,0,0,.35));
+  --tie-x:50%;
+  --tie-y:78%;
+}
+.bouquet-wrap.in-app{ width:min(64vmin,560px); height:min(64vmin,560px); }
+.bouquet-wrap *{box-sizing:border-box}
+
+/* Kertas pembungkus (cone) — default */
+.paper{
+  position:absolute; left:50%; top:var(--tie-y);
+  width:66%; height:48%;
+  transform:translate(-50%,-5%);
+  z-index:2;
+  background:linear-gradient(180deg,#f3eee8 0%,#e6dfd6 60%,#d9d0c6 100%);
+  clip-path:polygon(50% 100%, 0% 35%, 12% 28%, 50% 40%, 88% 28%, 100% 35%);
+  border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.18), inset 0 2px 8px rgba(255,255,255,.6);
+}
+/* Kertas putih */
+.paper.white{
+  background:linear-gradient(180deg,#ffffff 0%, #f8fafc 55%, #eef2f7 100%);
+  box-shadow:0 10px 24px rgba(0,0,0,.18), inset 0 2px 10px rgba(255,255,255,.8);
+}
+
+/* Pita */
+.tie{
+  position:absolute; left:var(--tie-x); top:var(--tie-y);
+  transform:translate(-50%,-50%);
+  width:130px; height:18px;
+  background:#f59e0b; border-radius:10px; z-index:4;
+  box-shadow:0 2px 0 rgba(0,0,0,.2);
+}
+.tie:before,.tie:after{
+  content:""; position:absolute; top:14px; border:10px solid transparent; border-top-color:#d97706
+}
+.tie:before{left:-10px; transform:rotate(-10deg)}
+.tie:after{right:-10px; transform:rotate(10deg)}
+/* Pita pink */
+.tie.pink{ background:#ec4899; }
+.tie.pink:before,.tie.pink:after{ border-top-color:#db2777; }
+
+/* Mawar */
+.rose{
+  position:absolute; left:var(--tie-x); top:var(--tie-y);
+  transform-origin:50% 100%;
+  z-index:1;
+  --len:180px;
+}
+.rose .stem{
+  width:2px; height:var(--len);
+  background:linear-gradient(#0a6,#074);
+  border-radius:2px; margin:0 auto;
+  transform-origin:bottom center;
+  filter:drop-shadow(0 0 2px rgba(0,0,0,.15));
+}
+.rose .leaf{
+  position:absolute; left:50%; bottom:calc(var(--len) * .55);
+  width:20px; height:12px; background:#0a5; border-radius:12px 12px 12px 0;
+  transform:translateX(2px) rotate(-28deg);
+  box-shadow:22px -8px 0 0 #0a5;
+}
+.rose .bud{
+  position:absolute; left:50%; bottom:calc(var(--len) + 6px);
+  width:30px; height:30px; margin-left:-15px; border-radius:50%;
+  background:
+    radial-gradient(circle at 60% 40%, #ff9ab0 0 9px, transparent 10px),
+    radial-gradient(circle at 40% 62%, #ff5a78 0 12px, transparent 13px),
+    radial-gradient(circle at 56% 62%, #ff2f5d 0 15px, transparent 16px);
+  box-shadow:inset -4px -4px 0 0 #d3153f;
+  z-index:3;
+  animation:budPop .45s ease-out both;
+}
+
+/* Goyangan natural */
+.rose{animation:sway 4s ease-in-out infinite}
+@keyframes sway{
+  0%,100%{transform:rotate(var(--rot,0deg)) translateY(calc(-1 * var(--rise,0px)))}
+  50%{transform:rotate(calc(var(--rot,0deg) + .8deg)) translateY(calc(-1 * var(--rise,0px)))}
+}
+
+/* Ribbon util (pink) */
+.ribbon{ background:#ec4899; }
+.ribbon:before,.ribbon:after{ border-top-color:#db2777; }
+
+/* ===== Gift Box ===== */
+.gift-box{
+  position:relative; width:160px; height:130px;
+  transform-style:preserve-3d;
+  transition:transform .5s ease;
+  filter:drop-shadow(0 12px 18px rgba(0,0,0,.25));
+}
+.gift-body{
+  position:absolute; left:0; bottom:0; width:100%; height:100%;
+  background:linear-gradient(180deg,#8b5cf6 0%, #6d28d9 100%);
+  border-radius:10px;
+}
+.gift-lid{
+  position:absolute; left:-6px; top:-34px; width:172px; height:48px;
+  background:linear-gradient(180deg,#a78bfa 0%, #7c3aed 100%);
+  border-radius:12px; transform-origin:left bottom;
+  transition:transform .5s ease, box-shadow .5s ease;
+  box-shadow:0 8px 14px rgba(0,0,0,.2);
+}
+.gift-ribbon-vert, .gift-ribbon-hor{
+  position:absolute; background:#f59e0b;
+}
+.gift-ribbon-vert{
+  width:18px; height:100%; left:calc(50% - 9px); bottom:0;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);
+}
+.gift-ribbon-hor{
+  height:18px; width:100%; left:0; top:22px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);
+  border-radius:10px;
+}
+
+/* state open */
+.gift-box.open .gift-lid{
+  transform:rotateX(-65deg) rotateZ(-8deg) translateY(-6px);
+  box-shadow:0 18px 26px rgba(0,0,0,.35);
+}
+.gift-box.open{ transform:translateY(-6px) }
